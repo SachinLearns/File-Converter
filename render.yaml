@@ -4,5 +4,9 @@ services:
     env: python
     buildCommand: |
       apt-get update && apt-get install -y gcc python3-dev libssl-dev libffi-dev libjpeg-dev zlib1g-dev poppler-utils
-      pip install -r requirements.txt
+      pip install flask
+      pip install pdf2image
+      pip install pdfminer
+      pip install pdfminer.six
+      pip install python-docx
     startCommand: gunicorn File-Converter:app
