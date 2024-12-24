@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: File-Converter
+    env: python
+    buildCommand: |
+      apt-get update && apt-get install -y gcc python3-dev libssl-dev libffi-dev libjpeg-dev zlib1g-dev poppler-utils
+      pip install -r requirements.txt
+    startCommand: gunicorn File-Converter:app
