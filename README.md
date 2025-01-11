@@ -6,6 +6,7 @@ File-Converter is a Python-based web application designed to provide users with 
 - **PDF to Image Converter**: Converts PDF files to image formats (JPG or PNG).
 - **Image to PDF Converter**: Merges multiple image files into a single PDF.
 - **PDF to DOCX Converter**: Converts PDF files to editable Word documents.
+- **HEIC to PNG Converter**: Converts HEIC image files to PNG format.
 
 ## Live Demo
 You can try the live version of the app here: [File-Converter](https://file-converter-ljqd.onrender.com/).
@@ -21,6 +22,7 @@ You can try the live version of the app here: [File-Converter](https://file-conv
 - **Pillow (PIL)**: For image processing and merging images into PDFs.
 - **pdfminer.six**: For extracting text from PDF files to facilitate PDF-to-DOCX conversion.
 - **python-docx**: For creating Word documents programmatically.
+- **pillow-heif**: For handling HEIC files and converting them to PNG.
 
 ### **Deployment**
 - **Render**: A modern cloud platform used for deploying the application. Render handles the environment setup and provides a live URL for public access.
@@ -65,4 +67,6 @@ This project is open-source and available under the MIT License.
 - [Flask Documentation](https://flask.palletsprojects.com/)
 - [Render Documentation](https://render.com/docs)
 - [ChatGPT](https://openai.com/chatgpt) for deployment guidance.
+- [Pillow Documentation](https://pillow.readthedocs.io/)
+- [pillow-heif Documentation](https://pillow-heif.readthedocs.io/)
 
