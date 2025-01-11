@@ -6,6 +6,7 @@ from io import BytesIO
 from PIL import Image
 from pdfminer.high_level import extract_text
 from docx import Document
+import pillow_heif
 
 app = Flask(__name__)
 
@@ -92,6 +93,14 @@ HTML_TEMPLATE = f"""
         <h1>File Converter</h1>
     </header>
     <main>
+
+        <h2>HEIC to PNG Converter</h2>
+        <form action="/upload_heic" method="post" enctype="multipart/form-data">
+            <label for="heic">Choose a HEIC file (max 10 MB):</label>
+            <input type="file" id="heic" name="heic" accept="image/heic" required>
+            <button type="submit">Convert</button>
+        </form>
+
         <h2>PDF to Image Converter</h2>
         <form action="/upload_pdf" method="post" enctype="multipart/form-data">
             <label for="pdf">Choose a PDF file (max 10 MB):</label>
@@ -126,6 +135,44 @@ HTML_TEMPLATE = f"""
 @app.route('/')
 def index():
     return render_template_string(HTML_TEMPLATE)
+
+@app.route('/upload_heic', methods=['POST'])
+def upload_heic():
+    if 'heic' not in request.files:
+        return "No file part", 400
+
+    heic_file = request.files['heic']
+    if heic_file.filename == '':
+        return "No selected file", 400
+
+    # Save the HEIC file
+    filename = secure_filename(heic_file.filename)
+    heic_path = os.path.join(UPLOAD_FOLDER, filename)
+    heic_file.save(heic_path)
+
+    try:
+        # Convert HEIC to PNG using pillow-heif
+        pillow_heif.register_heif_opener()  # Register HEIC opener for Pillow
+        image = Image.open(heic_path)
+        
+        output_filename = os.path.splitext(filename)[0] + '.png'
+        output_path = os.path.join(OUTPUT_FOLDER, output_filename)
+        image.save(output_path, "PNG")
+
+        # Prepare response
+        response = make_response(send_file(output_path, as_attachment=True))
+        response.headers['Content-Disposition'] = f'attachment; filename={output_filename}'
+
+        # Clean up
+        os.remove(heic_path)
+
+        return response
+
+    except Exception as e:
+        if os.path.exists(heic_path):
+            os.remove(heic_path)
+        return f"Error processing file: {e}", 500
+
 
 @app.route('/upload_pdf', methods=['POST'])
 def upload_pdf():

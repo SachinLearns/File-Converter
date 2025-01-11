@@ -9,4 +9,5 @@ services:
       pip install pdfminer
       pip install pdfminer.six
       pip install python-docx
+      pip install pillow-heif
     startCommand: gunicorn File-Converter:app
